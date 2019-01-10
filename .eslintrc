@@ -1,0 +1,43 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true,
+    "browser": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "plugins": [
+    "react"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "no-var": ["error"],
+    "key-spacing": ["error"],
+    "comma-dangle": ["error"],
+    "semi": ["error", "always"],
+    "space-infix-ops": ["error"],
+    "eqeqeq": ["error", "always"],
+    "eol-last": ["error", "always"],
+    "react/jsx-uses-vars": ["error"],
+    "react/jsx-uses-react": ["error"],
+    "newline-before-return": ["error"],
+    "linebreak-style": ["error", "unix"],
+    "spaced-comment": ["error", "always"],
+    "indent": ["error", 2, {"SwitchCase": 1}],
+    "object-curly-spacing": ["error", "always"],
+    "camelcase": ["error", {"properties": "never"}],
+    "padded-blocks": ["error", {"classes": "always"}],
+    "comma-spacing": ["error", {"before": false, "after": true}],
+    "quotes": ["error", "single", {"allowTemplateLiterals": true}],
+    "valid-jsdoc": ["warn", {"requireReturn": false, "requireParamDescription": false, "requireReturnDescription": false}]
+  }
+}
