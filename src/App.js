@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { ToDoList } from './components/ToDoList';
 import { Input } from './components/Input';
+import { Navigation } from './components/Navigation';
 
 class App extends Component {
 
@@ -36,17 +37,7 @@ class App extends Component {
     return (
       <div className="App">
         {/* <button className='btn btn-secondary'>Hello</button> */}
-        <ul className="nav nav-fill nav-tabs">
-          <li className="nav-item">
-            <a className="nav-link" href="/"  >All</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/">Completed</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/">Remaining</a>
-          </li>
-        </ul>
+        <Navigation items={['All', 'Completed', 'Remaining']} />
         <Input value={this.state.currentTodo} type='text' placeholder="Add New TODO" onChange={this.handleOnChange} onSubmit={this.handleOnSubmit}/>
         <ToDoList items={this.state.allToDoArray} />
       </div>
