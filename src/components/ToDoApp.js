@@ -10,7 +10,8 @@ export class ToDoApp extends Component {
     super(props);
     this.state = {
       currentText: '',
-      todoList: []
+      todoList: [],
+      currentList: 0 // 0: all, 1: completed, 2: remaining
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
@@ -20,7 +21,43 @@ export class ToDoApp extends Component {
     this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
     this.handleEditChange = this.handleEditChange.bind(this);
     this.onEditSubmit = this.onEditSubmit.bind(this);
+    this.displayAllTodos = this.displayAllTodos.bind(this);
+    this.displayCompletedTodos = this.displayCompletedTodos.bind(this);
+    this.displayRemainingTodos = this.displayRemainingTodos.bind(this);
+    // this.displayTodo = this.displayTodo.bind(this);
   }
+  displayAllTodos(e) {
+    e.preventDefault();
+    this.setState({
+      currentList: 0
+    });
+  }
+  displayCompletedTodos(e) {
+    e.preventDefault();
+    this.setState({
+      currentList: 1
+    });
+  }
+  displayRemainingTodos(e) {
+    e.preventDefault();
+    this.setState({
+      currentList: 2
+    });
+  }
+
+  // displayTodo(i) {
+  //   console.log('dtd');
+  //   switch(i) {
+  //     case 0:
+  //       return this.displayAllTodos;
+  //     case 1:
+  //       return this.displayCompletedTodos;
+  //     case 2:
+  //       return this.displayRemainingTodos;
+  //     default:
+  //       return this.displayAllTodos;
+  //   }
+  // }
 
   handleOnChange(e) {
     this.setState({
@@ -124,14 +161,45 @@ export class ToDoApp extends Component {
     // setTimeout(()=> console.log(this.state), 1000);
   }
 
+  filterDisplayList() {
+    switch(this.state.currentList) {
+      case 0: // all
+        return this.state.todoList;
+      case 1: // completed
+        return this.state.todoList.filter((todoItem) => {
+          return todoItem.doneStatus;
+        });
+      case 2: // remaining
+        return this.state.todoList.filter((todoItem) => {
+          return !todoItem.doneStatus;
+        });
+      default:
+        return this.state.todoList;
+    }
+  }
+
   render() {
+
     return (
       <>
-        <Navigation items={['All', 'Completed', 'Remaining']} />
-        <Input value={this.state.currentText} type='text' placeholder="Add New TODO" onChange={this.handleOnChange} onSubmit={this.handleOnSubmit}/>
+        <Navigation
+          items={['All', 'Completed', 'Remaining']}
+          currentList={this.state.currentList}
+          displayAllTodos={this.displayAllTodos}
+          displayCompletedTodos={this.displayCompletedTodos}
+          displayRemainingTodos={this.displayRemainingTodos}
+          displayTodo={this.displayTodo} />
+
+        <Input
+          value={this.state.currentText}
+          type='text'
+          placeholder="Add New TODO"
+          onChange={this.handleOnChange}
+          onSubmit={this.handleOnSubmit}/>
+
         <ToDoList
           handleCheckBoxChange={this.handleCheckBoxChange}
-          items={this.state.todoList}
+          items={this.filterDisplayList()}
           onDelete={this.handleOnDelete}
           onDone={this.handleOnDone}
           onEdit={this.handleOnEdit}
