@@ -9,19 +9,20 @@ export class ToDoApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTodo: '',
-      allToDoArray: []
+      currentText: '',
+      todoList: []
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnDone = this.handleOnDone.bind(this);
     this.handleOnDelete = this.handleOnDelete.bind(this);
     this.handleOnEdit = this.handleOnEdit.bind(this);
+    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
   }
 
   handleOnChange(e) {
     this.setState({
-      currentTodo: e.target.value
+      currentText: e.target.value
     });
   }
 
@@ -30,16 +31,28 @@ export class ToDoApp extends Component {
     e.preventDefault();
     const deleteId = e.target.parentNode.parentNode.getAttribute('id');
     // console.log(deleteId);
-    let newTodoArray = [].concat(...this.state.allToDoArray);
-    newTodoArray.splice(deleteId, 1);
+    const newToDoList = [].concat(...this.state.todoList);
+    newToDoList.splice(deleteId, 1);
 
     this.setState({
-      allToDoArray: newTodoArray
+      todoList: newToDoList
     });
 
   }
   handleOnDone(e) {
-    // console.log('done');
+
+    const doneId = e.target.parentNode.parentNode.getAttribute('id');
+    const newToDoList = [].concat(this.state.todoList);
+    const doneObj = Object.assign({}, newToDoList[doneId]);
+    doneObj.doneStatus = !doneObj.doneStatus;
+    newToDoList[doneId] = doneObj;
+
+    // console.log(this.state);
+    this.setState({
+      todoList: newToDoList
+    });
+
+    // setTimeout(()=> console.log(this.state), 1000);
   }
   handleOnEdit(e) {
     // console.log('edit');
@@ -47,21 +60,32 @@ export class ToDoApp extends Component {
 
   handleOnSubmit(e) {
     e.preventDefault();
-    const currentText = this.state.currentTodo;
-    const newToDO = [currentText, ...this.state.allToDoArray];
+    const submittedText = this.state.currentText;
+    const newToDoObj = {
+      todoContent: submittedText,
+      doneStatus: false,
+      editingStatus: false,
+      id: Date.now().toString()
+    };
+    const newToDoList = [newToDoObj, ...this.state.todoList];
     this.setState({
-      allToDoArray: newToDO,
-      currentTodo: ''
+      todoList: newToDoList,
+      currentText: ''
     });
+  }
+
+  handleCheckBoxChange(e) {
+    this.handleOnDone(e);
   }
 
   render() {
     return (
       <>
         <Navigation items={['All', 'Completed', 'Remaining']} />
-        <Input value={this.state.currentTodo} type='text' placeholder="Add New TODO" onChange={this.handleOnChange} onSubmit={this.handleOnSubmit}/>
+        <Input value={this.state.currentText} type='text' placeholder="Add New TODO" onChange={this.handleOnChange} onSubmit={this.handleOnSubmit}/>
         <ToDoList
-          items={this.state.allToDoArray}
+          handleCheckBoxChange={this.handleCheckBoxChange}
+          items={this.state.todoList}
           onDelete={this.handleOnDelete}
           onDone={this.handleOnDone}
           onEdit={this.handleOnEdit} />
