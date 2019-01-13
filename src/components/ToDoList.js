@@ -10,9 +10,11 @@ export const ToDoList = (props) =>
           value={item}
           key={i}
           myKey={i}
+          onEditingChange={props.onEditingChange}
           onDelete={props.onDelete}
           onDone={props.onDone}
-          onEdit={props.onEdit} />
+          onEdit={props.onEdit}
+          onEditSubmit={props.onEditSubmit} />
       )}
     </ul>
   );

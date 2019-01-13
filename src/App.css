@@ -44,3 +44,22 @@
 .done_task_item {
   background: lightgrey;
 }
+
+.list_item_edit_form {
+  width: 100%;
+  margin: auto;
+}
+
+.list_item_edit_form input {
+  width: 100%;
+  display: block;
+  margin: auto;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.list_item_edit_form p {
+  font-size: 10px;
+  color: grey;
+  margin-bottom: 0px;
+}

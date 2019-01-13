@@ -18,6 +18,8 @@ export class ToDoApp extends Component {
     this.handleOnDelete = this.handleOnDelete.bind(this);
     this.handleOnEdit = this.handleOnEdit.bind(this);
     this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
+    this.handleEditChange = this.handleEditChange.bind(this);
+    this.onEditSubmit = this.onEditSubmit.bind(this);
   }
 
   handleOnChange(e) {
@@ -55,7 +57,18 @@ export class ToDoApp extends Component {
     // setTimeout(()=> console.log(this.state), 1000);
   }
   handleOnEdit(e) {
-    // console.log('edit');
+    const editingId = e.target.parentNode.parentNode.getAttribute('id');
+    const newToDoList = [].concat(this.state.todoList);
+    const editingObj = Object.assign({}, newToDoList[editingId]);
+    editingObj.editingStatus = !editingObj.editingStatus;
+    newToDoList[editingId] = editingObj;
+
+    // console.log(this.state);
+    this.setState({
+      todoList: newToDoList
+    });
+
+    // setTimeout(()=> console.log(this.state), 1000);
   }
 
   handleOnSubmit(e) {
@@ -78,6 +91,39 @@ export class ToDoApp extends Component {
     this.handleOnDone(e);
   }
 
+  handleEditChange(e) {
+    const editingId = e.target.parentNode.parentNode.getAttribute('id');
+    const newToDoList = [].concat(this.state.todoList);
+    const editingObj = Object.assign({}, newToDoList[editingId]);
+    editingObj.todoContent = e.target.value;
+    newToDoList[editingId] = editingObj;
+    // console.log(this.state);
+    this.setState({
+      todoList: newToDoList
+    });
+
+    // setTimeout(()=> console.log(this.state), 1000);
+  }
+
+  onEditSubmit(e) {
+    e.preventDefault();
+    const editingId = e.target.parentNode.getAttribute('id');
+    const newToDoList = [].concat(this.state.todoList);
+    const editingObj = Object.assign({}, newToDoList[editingId]);
+
+    const formChilds = e.target.childNodes;
+    editingObj.todoContent = formChilds[0].value;
+    editingObj.editingStatus = false;
+    newToDoList[editingId] = editingObj;
+
+    // console.log(this.state);
+    this.setState({
+      todoList: newToDoList
+    });
+
+    // setTimeout(()=> console.log(this.state), 1000);
+  }
+
   render() {
     return (
       <>
@@ -88,7 +134,9 @@ export class ToDoApp extends Component {
           items={this.state.todoList}
           onDelete={this.handleOnDelete}
           onDone={this.handleOnDone}
-          onEdit={this.handleOnEdit} />
+          onEdit={this.handleOnEdit}
+          onEditingChange={this.handleEditChange}
+          onEditSubmit={this.onEditSubmit} />
       </>
     );
   }
