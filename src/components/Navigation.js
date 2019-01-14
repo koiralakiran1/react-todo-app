@@ -9,7 +9,7 @@ export const Navigation = (props) =>
             <a
               onClick={(i === 0) ? props.displayAllTodos : ((i === 1) ? props.displayCompletedTodos : props.displayRemainingTodos)}
               className={(props.currentList === i) ? 'nav-link active' : 'nav-link'}
-              href="#">{item}</a>
+              href="/">{item}</a>
           </li>
         )
       )}

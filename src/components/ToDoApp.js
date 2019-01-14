@@ -8,9 +8,14 @@ export class ToDoApp extends Component {
 
   constructor(props) {
     super(props);
+    // window.localStorage.clear();
+    const storageTodos = window.localStorage.getItem('storageTodos');
+    const storageTodosArr = storageTodos ? JSON.parse(storageTodos) : [];
+    // console.log(storageTodosArr);
+
     this.state = {
       currentText: '',
-      todoList: [],
+      todoList: storageTodosArr,
       currentList: 0 // 0: all, 1: completed, 2: remaining
     };
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -179,6 +184,9 @@ export class ToDoApp extends Component {
   }
 
   render() {
+
+    window.localStorage.clear();
+    window.localStorage.setItem('storageTodos', JSON.stringify(this.state.todoList));
 
     return (
       <>
