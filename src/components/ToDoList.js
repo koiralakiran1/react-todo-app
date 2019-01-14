@@ -4,17 +4,20 @@ import { ToDoListItem } from './ToDoListItem';
 export const ToDoList = (props) =>
   (
     <ul className="list-group">
-      {props.items.map((item, i) =>
-        <ToDoListItem
-          handleCheckBoxChange={props.handleCheckBoxChange}
+      {props.items.map((item, i) => {
+
+        return (<ToDoListItem
           value={item}
           key={i}
           myKey={i}
+          handleCheckBoxChange={props.handleCheckBoxChange}
           onEditingChange={props.onEditingChange}
           onDelete={props.onDelete}
           onDone={props.onDone}
           onEdit={props.onEdit}
-          onEditSubmit={props.onEditSubmit} />
+          onEditSubmit={props.onEditSubmit} />);
+
+      }
       )}
     </ul>
   );

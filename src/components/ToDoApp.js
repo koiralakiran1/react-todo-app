@@ -69,9 +69,9 @@ export class ToDoApp extends Component {
     // console.log('delete');
     e.preventDefault();
     const deleteId = e.target.parentNode.parentNode.getAttribute('id');
-    // console.log(deleteId);
     const newToDoList = [].concat(...this.state.todoList);
-    newToDoList.splice(deleteId, 1);
+    // const deleteObj = Object.assign({}, newToDoList.filter((item) => { return item.id === deleteId; }));
+    newToDoList.splice(newToDoList.findIndex((item) => {return item.id === deleteId; }), 1);
 
     this.setState({
       todoList: newToDoList
@@ -82,9 +82,9 @@ export class ToDoApp extends Component {
 
     const doneId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const doneObj = Object.assign({}, newToDoList[doneId]);
+    const doneObj = Object.assign({}, newToDoList.filter((item) => { return item.id === doneId; })[0]);
     doneObj.doneStatus = !doneObj.doneStatus;
-    newToDoList[doneId] = doneObj;
+    newToDoList[newToDoList.findIndex((item) => {return item.id === doneId; })] = doneObj;
 
     // console.log(this.state);
     this.setState({
@@ -96,9 +96,9 @@ export class ToDoApp extends Component {
   handleOnEdit(e) {
     const editingId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList[editingId]);
+    const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
     editingObj.editingStatus = !editingObj.editingStatus;
-    newToDoList[editingId] = editingObj;
+    newToDoList[newToDoList.findIndex((item) => {return item.id === editingId; })] = editingObj;
 
     // console.log(this.state);
     this.setState({
@@ -131,9 +131,9 @@ export class ToDoApp extends Component {
   handleEditChange(e) {
     const editingId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList[editingId]);
+    const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
     editingObj.todoContent = e.target.value;
-    newToDoList[editingId] = editingObj;
+    newToDoList[newToDoList.findIndex((item) => { return item.id === editingId; })] = editingObj;
     // console.log(this.state);
     this.setState({
       todoList: newToDoList
@@ -146,12 +146,12 @@ export class ToDoApp extends Component {
     e.preventDefault();
     const editingId = e.target.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList[editingId]);
+    const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
 
     const formChilds = e.target.childNodes;
     editingObj.todoContent = formChilds[0].value;
     editingObj.editingStatus = false;
-    newToDoList[editingId] = editingObj;
+    newToDoList[newToDoList.findIndex((item) => { return item.id === editingId; })] = editingObj;
 
     // console.log(this.state);
     this.setState({
@@ -187,8 +187,7 @@ export class ToDoApp extends Component {
           currentList={this.state.currentList}
           displayAllTodos={this.displayAllTodos}
           displayCompletedTodos={this.displayCompletedTodos}
-          displayRemainingTodos={this.displayRemainingTodos}
-          displayTodo={this.displayTodo} />
+          displayRemainingTodos={this.displayRemainingTodos} />
 
         <Input
           value={this.state.currentText}
