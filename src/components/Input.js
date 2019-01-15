@@ -1,18 +1,14 @@
 import React from 'react';
 
-export class Input extends React.Component {
-  render() {
-    return (
-      <form className="add_item_bar form-group" onSubmit={this.props.onSubmit}>
-        <input
-          type={this.props.type}
-          placeholder={this.props.placeholder}
-          className="form-control"
-          onChange={this.props.onChange}
-          value={this.props.value} />
-      </form>
-
-    );
-  }
-
-}
+export const Input = (props) => {
+  return (
+    <form className="add_item_bar form-group" onSubmit={props.onSubmit}>
+      <input
+        type={props.type}
+        placeholder={props.placeholder}
+        className="form-control"
+        onChange={props.onChange}
+        value={props.value} />
+    </form>
+  );
+};

@@ -5,9 +5,9 @@ export const Navigation = (props) =>
     <ul className="nav nav-fill nav-tabs">
       {props.items.map((item, i) =>
         (
-          <li key={'index_' + i} className='nav-item'>
+          <li key={'index_' + i} className='nav-item' id={'nav_item_' + item.toLowerCase()}>
             <a
-              onClick={(i === 0) ? props.displayAllTodos : ((i === 1) ? props.displayCompletedTodos : props.displayRemainingTodos)}
+              onClick={props.displayTodo}
               className={(props.currentList === i) ? 'nav-link active' : 'nav-link'}
               href="/">{item}</a>
           </li>

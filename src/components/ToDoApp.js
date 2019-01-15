@@ -1,22 +1,20 @@
-import React, { Component } from 'react';
 import '../App.css';
-import { ToDoList } from './ToDoList';
 import { Input } from './Input';
+import { ToDoList } from './ToDoList';
+import React, { Component } from 'react';
 import { Navigation } from './Navigation';
+import { ALL_TODOS, REMAINING_TODOS, COMPLETED_TODOS } from '../constants/constants';
 
 export class ToDoApp extends Component {
 
   constructor(props) {
     super(props);
-    // window.localStorage.clear();
     const storageTodos = window.localStorage.getItem('storageTodos');
     const storageTodosArr = storageTodos ? JSON.parse(storageTodos) : [];
-    // console.log(storageTodosArr);
-
     this.state = {
       currentText: '',
       todoList: storageTodosArr,
-      currentList: 0 // 0: all, 1: completed, 2: remaining
+      currentList: ALL_TODOS
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
@@ -26,43 +24,38 @@ export class ToDoApp extends Component {
     this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
     this.handleEditChange = this.handleEditChange.bind(this);
     this.onEditSubmit = this.onEditSubmit.bind(this);
-    this.displayAllTodos = this.displayAllTodos.bind(this);
-    this.displayCompletedTodos = this.displayCompletedTodos.bind(this);
-    this.displayRemainingTodos = this.displayRemainingTodos.bind(this);
-    // this.displayTodo = this.displayTodo.bind(this);
-  }
-  displayAllTodos(e) {
-    e.preventDefault();
-    this.setState({
-      currentList: 0
-    });
-  }
-  displayCompletedTodos(e) {
-    e.preventDefault();
-    this.setState({
-      currentList: 1
-    });
-  }
-  displayRemainingTodos(e) {
-    e.preventDefault();
-    this.setState({
-      currentList: 2
-    });
+    this.displayTodo = this.displayTodo.bind(this);
   }
 
-  // displayTodo(i) {
-  //   console.log('dtd');
-  //   switch(i) {
-  //     case 0:
-  //       return this.displayAllTodos;
-  //     case 1:
-  //       return this.displayCompletedTodos;
-  //     case 2:
-  //       return this.displayRemainingTodos;
-  //     default:
-  //       return this.displayAllTodos;
-  //   }
-  // }
+  displayTodo(e) {
+    e.preventDefault();
+    switch(e.target.parentNode.getAttribute('id')) {
+      case 'nav_item_all':
+        e.preventDefault();
+        this.setState({
+          currentList: ALL_TODOS
+        });
+        break;
+      case 'nav_item_completed':
+        e.preventDefault();
+        this.setState({
+          currentList: COMPLETED_TODOS
+        });
+        break;
+      case 'nav_item_remaining':
+        e.preventDefault();
+        this.setState({
+          currentList: REMAINING_TODOS
+        });
+        break;
+      default:
+        e.preventDefault();
+        this.setState({
+          currentList: ALL_TODOS
+        });
+        break;
+    }
+  }
 
   handleOnChange(e) {
     this.setState({
@@ -71,46 +64,35 @@ export class ToDoApp extends Component {
   }
 
   handleOnDelete(e) {
-    // console.log('delete');
     e.preventDefault();
     const deleteId = e.target.parentNode.parentNode.getAttribute('id');
-    const newToDoList = [].concat(...this.state.todoList);
-    // const deleteObj = Object.assign({}, newToDoList.filter((item) => { return item.id === deleteId; }));
+    const newToDoList = [].concat(this.state.todoList);
     newToDoList.splice(newToDoList.findIndex((item) => {return item.id === deleteId; }), 1);
-
     this.setState({
       todoList: newToDoList
     });
-
   }
-  handleOnDone(e) {
 
+  handleOnDone(e) {
     const doneId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
     const doneObj = Object.assign({}, newToDoList.filter((item) => { return item.id === doneId; })[0]);
     doneObj.doneStatus = !doneObj.doneStatus;
     newToDoList[newToDoList.findIndex((item) => {return item.id === doneId; })] = doneObj;
-
-    // console.log(this.state);
     this.setState({
       todoList: newToDoList
     });
-
-    // setTimeout(()=> console.log(this.state), 1000);
   }
+
   handleOnEdit(e) {
     const editingId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
     const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
     editingObj.editingStatus = !editingObj.editingStatus;
     newToDoList[newToDoList.findIndex((item) => {return item.id === editingId; })] = editingObj;
-
-    // console.log(this.state);
     this.setState({
       todoList: newToDoList
     });
-
-    // setTimeout(()=> console.log(this.state), 1000);
   }
 
   handleOnSubmit(e) {
@@ -139,12 +121,9 @@ export class ToDoApp extends Component {
     const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
     editingObj.todoContent = e.target.value;
     newToDoList[newToDoList.findIndex((item) => { return item.id === editingId; })] = editingObj;
-    // console.log(this.state);
     this.setState({
       todoList: newToDoList
     });
-
-    // setTimeout(()=> console.log(this.state), 1000);
   }
 
   onEditSubmit(e) {
@@ -152,29 +131,24 @@ export class ToDoApp extends Component {
     const editingId = e.target.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
     const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
-
     const formChilds = e.target.childNodes;
     editingObj.todoContent = formChilds[0].value;
     editingObj.editingStatus = false;
     newToDoList[newToDoList.findIndex((item) => { return item.id === editingId; })] = editingObj;
-
-    // console.log(this.state);
     this.setState({
       todoList: newToDoList
     });
-
-    // setTimeout(()=> console.log(this.state), 1000);
   }
 
   filterDisplayList() {
     switch(this.state.currentList) {
-      case 0: // all
+      case ALL_TODOS:
         return this.state.todoList;
-      case 1: // completed
+      case COMPLETED_TODOS:
         return this.state.todoList.filter((todoItem) => {
           return todoItem.doneStatus;
         });
-      case 2: // remaining
+      case REMAINING_TODOS:
         return this.state.todoList.filter((todoItem) => {
           return !todoItem.doneStatus;
         });
@@ -183,19 +157,21 @@ export class ToDoApp extends Component {
     }
   }
 
-  render() {
-
+  componentWillUnmount() {
     window.localStorage.clear();
     window.localStorage.setItem('storageTodos', JSON.stringify(this.state.todoList));
+  }
+
+  render() {
 
     return (
       <>
+        <h1><a href='/'>Todo App</a></h1>
+
         <Navigation
           items={['All', 'Completed', 'Remaining']}
           currentList={this.state.currentList}
-          displayAllTodos={this.displayAllTodos}
-          displayCompletedTodos={this.displayCompletedTodos}
-          displayRemainingTodos={this.displayRemainingTodos} />
+          displayTodo={this.displayTodo} />
 
         <Input
           value={this.state.currentText}
@@ -217,5 +193,3 @@ export class ToDoApp extends Component {
   }
 
 }
-
-// export default ToDoApp;
