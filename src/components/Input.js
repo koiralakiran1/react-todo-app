@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ *
+ * @param {*} props
+ */
 export const Input = (props) => {
   return (
     <form className="add_item_bar form-group" onSubmit={props.onSubmit}>
