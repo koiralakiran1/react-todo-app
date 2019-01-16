@@ -1,7 +1,12 @@
 import React from 'react';
 import { ToDoListItem } from './ToDoListItem';
 
-export const ToDoList = (props) =>
+export /**
+ *
+ *
+ * @param {*} props
+ */
+const ToDoList = (props) =>
   (
     <ul className="list-group">
       {props.items.map((item, i) => {

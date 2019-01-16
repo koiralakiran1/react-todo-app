@@ -3,99 +3,111 @@ import { Input } from './Input';
 import { ToDoList } from './ToDoList';
 import React, { Component } from 'react';
 import { Navigation } from './Navigation';
-import { ALL_TODOS, REMAINING_TODOS, COMPLETED_TODOS } from '../constants/constants';
+import { TABS } from '../constants/constants';
 
+/**
+ * Containing class component for the app. Renders all other components by passing down its state as props.
+ */
 export class ToDoApp extends Component {
 
+  /**
+   * Constructor for ToDoApp class component.
+   *
+   * @param   {Object}  props  Props here.
+   *
+   * @returns  {void} Return here.
+   */
   constructor(props) {
     super(props);
-    const storageTodos = window.localStorage.getItem('storageTodos');
-    const storageTodosArr = storageTodos ? JSON.parse(storageTodos) : [];
     this.state = {
       currentText: '',
-      todoList: storageTodosArr,
-      currentList: ALL_TODOS
+      todoList: [],
+      currentList: TABS.all
     };
-    this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.handleOnDone = this.handleOnDone.bind(this);
-    this.handleOnDelete = this.handleOnDelete.bind(this);
-    this.handleOnEdit = this.handleOnEdit.bind(this);
-    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
-    this.handleEditChange = this.handleEditChange.bind(this);
-    this.onEditSubmit = this.onEditSubmit.bind(this);
-    this.displayTodo = this.displayTodo.bind(this);
   }
 
-  displayTodo(e) {
-    e.preventDefault();
-    switch(e.target.parentNode.getAttribute('id')) {
-      case 'nav_item_all':
-        e.preventDefault();
-        this.setState({
-          currentList: ALL_TODOS
-        });
-        break;
-      case 'nav_item_completed':
-        e.preventDefault();
-        this.setState({
-          currentList: COMPLETED_TODOS
-        });
-        break;
-      case 'nav_item_remaining':
-        e.preventDefault();
-        this.setState({
-          currentList: REMAINING_TODOS
-        });
-        break;
-      default:
-        e.preventDefault();
-        this.setState({
-          currentList: ALL_TODOS
-        });
-        break;
-    }
-  }
-
-  handleOnChange(e) {
+  /**
+   * Handles changing values on 'Add New TODO' input field.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  handleOnChange = (e) => {
     this.setState({
       currentText: e.target.value
     });
   }
 
-  handleOnDelete(e) {
+  /**
+   * Handles deleting item from the list when delete button is pressed.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  handleOnDelete = (e) => {
     e.preventDefault();
     const deleteId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    newToDoList.splice(newToDoList.findIndex((item) => {return item.id === deleteId; }), 1);
+
+    newToDoList.splice(newToDoList.findIndex((item) => {
+      return item.id === deleteId;
+    }), 1);
     this.setState({
       todoList: newToDoList
     });
   }
 
-  handleOnDone(e) {
+  /**
+   * Handles the checbox checked/unchecked states.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  handleOnDone = (e) => {
     const doneId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const doneObj = Object.assign({}, newToDoList.filter((item) => { return item.id === doneId; })[0]);
+    const doneObj = Object.assign({}, newToDoList.filter((item) => {
+      return item.id === doneId;
+    })[0]);
+
     doneObj.doneStatus = !doneObj.doneStatus;
-    newToDoList[newToDoList.findIndex((item) => {return item.id === doneId; })] = doneObj;
+    newToDoList[newToDoList.findIndex((item) => {
+      return item.id === doneId;
+    })] = doneObj;
     this.setState({
       todoList: newToDoList
     });
   }
 
-  handleOnEdit(e) {
+  /**
+   * Toggles the edit status when edit button is clicked.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  handleOnEdit = (e) => {
     const editingId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
+    const editingObj = Object.assign({}, newToDoList.filter((item) => {
+      return item.id === editingId;
+    })[0]);
+
     editingObj.editingStatus = !editingObj.editingStatus;
-    newToDoList[newToDoList.findIndex((item) => {return item.id === editingId; })] = editingObj;
+    newToDoList[newToDoList.findIndex((item) => {
+      return item.id === editingId;
+    })] = editingObj;
     this.setState({
       todoList: newToDoList
     });
   }
 
-  handleOnSubmit(e) {
+  /**
+   * Handles creating new todo when new todo is submitted.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  handleOnSubmit = (e) => {
     e.preventDefault();
     const submittedText = this.state.currentText;
     const newToDoObj = {
@@ -105,50 +117,86 @@ export class ToDoApp extends Component {
       id: Date.now().toString()
     };
     const newToDoList = [newToDoObj, ...this.state.todoList];
+
     this.setState({
       todoList: newToDoList,
       currentText: ''
     });
   }
 
-  handleCheckBoxChange(e) {
+  /**
+   * Handles the checbox checked/unchecked states. Passes the event 'e' to handleOnDone function.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  handleCheckBoxChange = (e) => {
     this.handleOnDone(e);
   }
 
-  handleEditChange(e) {
+  /**
+   * Handles changing values in the edit input field when in editStatus is true.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  handleEditChange = (e) => {
     const editingId = e.target.parentNode.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
+    const editingObj = Object.assign({}, newToDoList.filter((item) => {
+      return item.id === editingId;
+    })[0]);
+
     editingObj.todoContent = e.target.value;
-    newToDoList[newToDoList.findIndex((item) => { return item.id === editingId; })] = editingObj;
+    newToDoList[newToDoList.findIndex((item) => {
+      return item.id === editingId;
+    })] = editingObj;
     this.setState({
       todoList: newToDoList
     });
   }
 
-  onEditSubmit(e) {
+
+  /**
+   * Handles setting the todo item's new value when submitted on edit input field.
+   *
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  onEditSubmit = (e) => {
     e.preventDefault();
     const editingId = e.target.parentNode.getAttribute('id');
     const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList.filter((item) => { return item.id === editingId; })[0]);
+    const editingObj = Object.assign({}, newToDoList.filter((item) => {
+      return item.id === editingId;
+    })[0]);
     const formChilds = e.target.childNodes;
+
     editingObj.todoContent = formChilds[0].value;
     editingObj.editingStatus = false;
-    newToDoList[newToDoList.findIndex((item) => { return item.id === editingId; })] = editingObj;
+    newToDoList[newToDoList.findIndex((item) => {
+      return item.id === editingId;
+    })] = editingObj;
     this.setState({
       todoList: newToDoList
     });
   }
 
-  filterDisplayList() {
+  /**
+   * Filters the list to be displayed according to currentList(all,completed, remaining) value.
+   *
+   * @returns {Array}
+   * @memberof ToDoApp
+   */
+  filterDisplayList = () => {
     switch(this.state.currentList) {
-      case ALL_TODOS:
+      case TABS.all:
         return this.state.todoList;
-      case COMPLETED_TODOS:
+      case TABS.completed:
         return this.state.todoList.filter((todoItem) => {
           return todoItem.doneStatus;
         });
-      case REMAINING_TODOS:
+      case TABS.remaining:
         return this.state.todoList.filter((todoItem) => {
           return !todoItem.doneStatus;
         });
@@ -157,11 +205,50 @@ export class ToDoApp extends Component {
     }
   }
 
-  componentWillUnmount() {
-    window.localStorage.clear();
+  /**
+   * Handles changing currentList's value when tabs on the navigation are clicked.
+   *
+   * @param {String} tab Value of pressed tab (all, completed, remaining).
+   * @param {Event} e
+   * @memberof ToDoApp
+   */
+  setCurrentTab = (tab, e) => {
+    e.preventDefault();
+    this.setState({
+      currentList: tab
+    });
+  }
+
+  /**
+   * Store the todoList array to local storage on each component update.
+   *
+   * @memberof ToDoApp
+   */
+  componentDidUpdate = () => {
     window.localStorage.setItem('storageTodos', JSON.stringify(this.state.todoList));
   }
 
+  /**
+   * Gets todoList from local storage and sets the state with that value.
+   *
+   * @memberof ToDoApp
+   */
+  componentDidMount = () => {
+    const storageTodos = window.localStorage.getItem('storageTodos');
+    const storageTodosArr = storageTodos ? JSON.parse(storageTodos) : [];
+
+    window.localStorage.clear();
+    this.setState( {
+      todoList: storageTodosArr
+    });
+  }
+
+  /**
+   * Renders the ToDoApp.
+   *
+   * @returns {Fragment}
+   * @memberof ToDoApp
+   */
   render() {
 
     return (
@@ -169,9 +256,8 @@ export class ToDoApp extends Component {
         <h1><a href='/'>Todo App</a></h1>
 
         <Navigation
-          items={['All', 'Completed', 'Remaining']}
-          currentList={this.state.currentList}
-          displayTodo={this.displayTodo} />
+          setCurrentTab= {this.setCurrentTab}
+          currentList={this.state.currentList} />
 
         <Input
           value={this.state.currentText}
