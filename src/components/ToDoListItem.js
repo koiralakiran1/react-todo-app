@@ -22,8 +22,8 @@ export const ToDoListItem = (props) => {
           <label className={props.value.doneStatus ? 'done_task_text' : ''} htmlFor={'input_' + props.myKey}>{props.value.todoContent}</label>
         </div>
         <div className='list_btn_group'>
-          <button className="btn btn-primary" onClick={props.onEdit}>&#128393;</button>
-          <button className="btn btn-danger" onClick={props.onDelete}>&#128502;</button>
+          <button className="btn btn-primary" onClick={props.onEdit}><i class="fas fa-pen-nib"></i></button>
+          <button className="btn btn-danger" onClick={props.onDelete}><i class="fas fa-times"></i></button>
         </div>
       </li>
     );
