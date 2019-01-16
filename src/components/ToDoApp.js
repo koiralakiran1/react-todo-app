@@ -193,13 +193,9 @@ export class ToDoApp extends Component {
       case TABS.all:
         return this.state.todoList;
       case TABS.completed:
-        return this.state.todoList.filter((todoItem) => {
-          return todoItem.doneStatus;
-        });
+        return this.state.todoList.filter( todoItem => todoItem.doneStatus );
       case TABS.remaining:
-        return this.state.todoList.filter((todoItem) => {
-          return !todoItem.doneStatus;
-        });
+        return this.state.todoList.filter( todoItem => !todoItem.doneStatus );
       default:
         return this.state.todoList;
     }
