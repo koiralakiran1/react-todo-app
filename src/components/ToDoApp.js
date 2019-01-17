@@ -150,7 +150,7 @@ export class ToDoApp extends Component {
         return { ...item, todoContent: e.target.value };
       }
 
-      return { ... item };
+      return { ...item };
     });
 
     this.setState({
