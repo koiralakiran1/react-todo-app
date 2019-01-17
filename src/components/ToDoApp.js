@@ -41,17 +41,14 @@ export class ToDoApp extends Component {
   /**
    * Handles deleting item from the list when delete button is pressed.
    *
+   * @param {String} id
    * @param {Event} e
    * @memberof ToDoApp
    */
-  handleOnDelete = (e) => {
+  handleOnDelete = (id, e) => {
     e.preventDefault();
-    const deleteId = e.target.parentNode.parentNode.getAttribute('id');
-    const newToDoList = [].concat(this.state.todoList);
+    const newToDoList = [...this.state.todoList].filter( item => item.id !== id);
 
-    newToDoList.splice(newToDoList.findIndex((item) => {
-      return item.id === deleteId;
-    }), 1);
     this.setState({
       todoList: newToDoList
     });
@@ -60,20 +57,21 @@ export class ToDoApp extends Component {
   /**
    * Handles the checbox checked/unchecked states.
    *
+   * @param {String} id
    * @param {Event} e
    * @memberof ToDoApp
    */
-  handleOnDone = (e) => {
-    const doneId = e.target.parentNode.parentNode.getAttribute('id');
-    const newToDoList = [].concat(this.state.todoList);
-    const doneObj = Object.assign({}, newToDoList.filter((item) => {
-      return item.id === doneId;
-    })[0]);
+  handleOnDone = (id, e) => {
+    // e.preventDefault();
 
-    doneObj.doneStatus = !doneObj.doneStatus;
-    newToDoList[newToDoList.findIndex((item) => {
-      return item.id === doneId;
-    })] = doneObj;
+    const newToDoList = this.state.todoList.map( (item) => {
+      if(item.id === id) {
+        return { ...item, doneStatus: !item.doneStatus };
+      }
+
+      return { ...item }; // Needs spread operator?
+    });
+
     this.setState({
       todoList: newToDoList
     });
@@ -82,20 +80,21 @@ export class ToDoApp extends Component {
   /**
    * Toggles the edit status when edit button is clicked.
    *
+   * @param {String} id
    * @param {Event} e
    * @memberof ToDoApp
    */
-  handleOnEdit = (e) => {
-    const editingId = e.target.parentNode.parentNode.getAttribute('id');
-    const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList.filter((item) => {
-      return item.id === editingId;
-    })[0]);
+  handleOnEdit = (id, e) => {
 
-    editingObj.editingStatus = !editingObj.editingStatus;
-    newToDoList[newToDoList.findIndex((item) => {
-      return item.id === editingId;
-    })] = editingObj;
+    e.preventDefault();
+    const newToDoList = this.state.todoList.map( (item) => {
+      if(item.id === id) {
+        return { ...item, editingStatus: !item.editingStatus };
+      }
+
+      return { ...item };
+    });
+
     this.setState({
       todoList: newToDoList
     });
@@ -108,6 +107,7 @@ export class ToDoApp extends Component {
    * @memberof ToDoApp
    */
   handleOnSubmit = (e) => {
+
     e.preventDefault();
     const submittedText = this.state.currentText;
     const newToDoObj = {
@@ -116,7 +116,7 @@ export class ToDoApp extends Component {
       editingStatus: false,
       id: Date.now().toString()
     };
-    const newToDoList = [newToDoObj, ...this.state.todoList];
+    const newToDoList = [ ...this.state.todoList, newToDoObj ];
 
     this.setState({
       todoList: newToDoList,
@@ -127,30 +127,32 @@ export class ToDoApp extends Component {
   /**
    * Handles the checbox checked/unchecked states. Passes the event 'e' to handleOnDone function.
    *
+   * @param {String} id
    * @param {Event} e
    * @memberof ToDoApp
    */
-  handleCheckBoxChange = (e) => {
-    this.handleOnDone(e);
+  handleCheckBoxChange = (id, e) => {
+    this.handleOnDone(id, e);
   }
 
   /**
    * Handles changing values in the edit input field when in editStatus is true.
    *
+   * @param {String} id
    * @param {Event} e
    * @memberof ToDoApp
    */
-  handleEditChange = (e) => {
-    const editingId = e.target.parentNode.parentNode.getAttribute('id');
-    const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList.filter((item) => {
-      return item.id === editingId;
-    })[0]);
+  handleEditChange = (id, e) => {
+    e.preventDefault();
 
-    editingObj.todoContent = e.target.value;
-    newToDoList[newToDoList.findIndex((item) => {
-      return item.id === editingId;
-    })] = editingObj;
+    const newToDoList = this.state.todoList.map( (item) => {
+      if(item.id === id) {
+        return { ...item, todoContent: e.target.value };
+      }
+
+      return { ... item };
+    });
+
     this.setState({
       todoList: newToDoList
     });
@@ -160,26 +162,25 @@ export class ToDoApp extends Component {
   /**
    * Handles setting the todo item's new value when submitted on edit input field.
    *
+   * @param {String} id
    * @param {Event} e
    * @memberof ToDoApp
    */
-  onEditSubmit = (e) => {
-    e.preventDefault();
-    const editingId = e.target.parentNode.getAttribute('id');
-    const newToDoList = [].concat(this.state.todoList);
-    const editingObj = Object.assign({}, newToDoList.filter((item) => {
-      return item.id === editingId;
-    })[0]);
-    const formChilds = e.target.childNodes;
+  onEditSubmit = (id, e) => {
 
-    editingObj.todoContent = formChilds[0].value;
-    editingObj.editingStatus = false;
-    newToDoList[newToDoList.findIndex((item) => {
-      return item.id === editingId;
-    })] = editingObj;
+    e.preventDefault();
+    const newToDoList = this.state.todoList.map( (item) => {
+      if(item.id === id) {
+        return { ...item, todoContent: e.target.childNodes[0].value, editingStatus: !item.editingStatus }; // Accessing DOM ??
+      }
+
+      return { ...item };
+    });
+
     this.setState({
       todoList: newToDoList
     });
+
   }
 
   /**
@@ -204,11 +205,11 @@ export class ToDoApp extends Component {
   /**
    * Handles changing currentList's value when tabs on the navigation are clicked.
    *
-   * @param {String} tab Value of pressed tab (all, completed, remaining).
-   * @param {Event} e
+   * @param {Event} e Value of pressed tab (all, completed, remaining).
+   * @param {Tab} tab
    * @memberof ToDoApp
    */
-  setCurrentTab = (tab, e) => {
+  setCurrentTab = (e, tab) => {
     e.preventDefault();
     this.setState({
       currentList: tab
