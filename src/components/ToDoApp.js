@@ -175,7 +175,7 @@ export class ToDoApp extends Component {
     e.preventDefault();
     const newToDoList = this.state.todoList.map( (item) => {
       if(item.id === id) {
-        return { ...item, todoContent: e.target.childNodes[0].value, editingStatus: !item.editingStatus }; // Accessing DOM ??
+        return { ...item, editingStatus: !item.editingStatus }; // Accessing DOM ??
       }
 
       return { ...item };
