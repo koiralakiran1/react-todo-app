@@ -1,11 +1,5 @@
-.App {
+.App.container {
   text-align: center;
-  max-width: 500px;
-  margin: 10px auto;
-  height: 605px;
-  border: 3px solid lightseagreen;
-  border-radius: 20px;
-  padding: 10px;
 }
 
 .App>h1 a {
@@ -17,70 +11,51 @@
   margin-bottom: 15px;
 }
 
-.todo_list_item {
-  margin-bottom: 5px;
-  text-align: left;
-  box-shadow: 3px 3px 5px lightgrey;
-  width: 100%;
-}
-
-.btn {
-  margin-left: 5px;
-}
-
-.list_btn_group {
-  float: right;
-  width: 23%;
-  box-sizing: border-box;
-}
-
-.list_item_display_text {
-  float: left;
-  box-sizing: border-box;
-  overflow: hidden;
-  width: 75%;
-  margin-right: 5px;
-}
-
-.list_item_display_text label {
-  width: 90%;
-}
-
-.list_item_display_text input {
-  margin-left: 8px;
-  margin-right: 10px;
-  margin-top: 10px;
-  transform: scale(1.5);
-}
-
 .done_task_text {
   text-decoration: line-through;
 }
-
 .done_task_item {
   background: lightgrey;
 }
 
-.list_item_edit_form {
-  width: 100%;
-  margin: auto;
+.width-90 {
+  float: right;
+  width: 90%;
+  margin-bottom: 15px;
 }
 
-.list_item_edit_form input {
+.width-100 {
   width: 100%;
-  display: block;
-  margin: auto;
-  padding: 5px;
-  border-radius: 10px;
 }
 
-.list_item_edit_form p {
-  font-size: 10px;
-  color: grey;
-  margin-bottom: 0px;
+.align_left {
+  text-align: left;
+  overflow: hidden;
+}
+
+.width-45 {
+  width: 45%;
+  margin: 0px 2px;
+}
+
+.right_float {
+  float: right;
 }
 
 .list-group {
-  height: 400px;
-  overflow: auto;
+  font-size: 1.3rem;
+}
+
+.list-group-item {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.no-padding {
+  padding-right: 0px;
+}
+
+input[type='checkbox'] {
+  transform: scale(1.5);
+  margin-left: 5px;
 }
