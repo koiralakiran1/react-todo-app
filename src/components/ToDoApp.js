@@ -110,18 +110,22 @@ export class ToDoApp extends Component {
 
     e.preventDefault();
     const submittedText = this.state.currentText;
-    const newToDoObj = {
-      todoContent: submittedText,
-      doneStatus: false,
-      editingStatus: false,
-      id: Date.now().toString()
-    };
-    const newToDoList = [ ...this.state.todoList, newToDoObj ];
 
-    this.setState({
-      todoList: newToDoList,
-      currentText: ''
-    });
+    if(submittedText.trim() !== '') {
+      const newToDoObj = {
+        todoContent: submittedText,
+        doneStatus: false,
+        editingStatus: false,
+        id: Date.now().toString()
+      };
+      const newToDoList = [ newToDoObj, ...this.state.todoList ];
+
+      this.setState({
+        todoList: newToDoList,
+        currentText: ''
+      });
+    }
+
   }
 
   /**

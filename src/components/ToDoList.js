@@ -8,7 +8,7 @@ export /**
  */
 const ToDoList = (props) =>
   (
-    <ul className="list-group">
+    <ul className='list-group list-group-flush'>
       {props.items.map((item, i) => {
 
         return (
@@ -22,7 +22,6 @@ const ToDoList = (props) =>
             onDone={props.onDone}
             onEdit={props.onEdit}
             onEditSubmit={props.onEditSubmit} />);
-
       }
       )}
     </ul>
